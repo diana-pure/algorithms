@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.Buffer;
 import java.util.Scanner;
 
 /**
@@ -33,8 +37,12 @@ public class BinarySearch {
         }
 
         int[] result = binarySearch(input, test);
-        for (int i = 0; i < result.length; i++) {
-            System.out.println(result[i]);
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out))) {
+            for (int i = 0; i < result.length; i++) {
+                bw.write(result[i] + "\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
