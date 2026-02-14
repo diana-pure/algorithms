@@ -3,6 +3,7 @@ public class BinarySearchTest {
 
     public static void main(String[] args) {
         test1();
+        test2();
     }
 
     public static void test1() {
@@ -14,4 +15,20 @@ public class BinarySearchTest {
         System.out.println("time: " + (System.currentTimeMillis() - start) + "ms");
     }
 
+    public static void test2() {
+        int[] input = new int[100000];
+        int[] test = new int[300000];
+
+        for (int i = 0; i < 100000; i++) {
+            input[i] = i;
+        }
+
+        for (int i = 0; i < 300000; i++) {
+            test[i] = i;
+        }
+
+        long start = System.currentTimeMillis();
+        var result = BinarySearch.binarySearch(input, test);
+        System.out.println("time: " + (System.currentTimeMillis() - start) + "ms");
+    }
 }
