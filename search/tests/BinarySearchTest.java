@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class BinarySearchTest {
@@ -19,13 +20,15 @@ public class BinarySearchTest {
     public static void test2() {
         int[] input = new int[100000];
         int[] test = new int[300000];
+        var random = new Random(System.currentTimeMillis());
 
         for (int i = 0; i < 100000; i++) {
-            input[i] = Math.abs(Random.from(new Random(System.currentTimeMillis())).nextInt());
+            input[i] = Math.abs(random.nextInt());
         }
+        Arrays.sort(input);
 
         for (int i = 0; i < 300000; i++) {
-            test[i] = Math.abs(Random.from(new Random(System.currentTimeMillis())).nextInt());
+            test[i] = Math.abs(random.nextInt());
         }
 
         long start = System.currentTimeMillis();
