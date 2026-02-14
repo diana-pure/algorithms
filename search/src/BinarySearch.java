@@ -32,7 +32,10 @@ public class BinarySearch {
             }
         }
 
-        binarySearch(input, test);
+        int[] result = binarySearch(input, test);
+        for (int i = 0; i < result.length; i++) {
+            System.out.println(result[i]);
+        }
     }
 
     public static int[] binarySearch(int[] input, int[] test) {
@@ -46,7 +49,6 @@ public class BinarySearch {
                 num = input.length - 1 - position;
             }
             result[i] = num;
-            System.out.println(num);
         }
         return result;
     }

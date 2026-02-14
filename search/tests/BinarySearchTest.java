@@ -1,8 +1,9 @@
+import java.util.Random;
 
 public class BinarySearchTest {
 
     public static void main(String[] args) {
-        test1();
+//        test1();
         test2();
     }
 
@@ -20,11 +21,11 @@ public class BinarySearchTest {
         int[] test = new int[300000];
 
         for (int i = 0; i < 100000; i++) {
-            input[i] = i;
+            input[i] = Math.abs(Random.from(new Random(System.currentTimeMillis())).nextInt());
         }
 
         for (int i = 0; i < 300000; i++) {
-            test[i] = i;
+            test[i] = Math.abs(Random.from(new Random(System.currentTimeMillis())).nextInt());
         }
 
         long start = System.currentTimeMillis();
