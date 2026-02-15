@@ -1,3 +1,4 @@
 void main() {
-    BinarySearch.search();
+//    BinarySearch.search();
+    CafesOnRoad.readAndRun();
 }
