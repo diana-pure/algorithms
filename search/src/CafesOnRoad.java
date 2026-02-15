@@ -1,74 +1,81 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * В первой строке стандартного входа даны целые числа N, K, M — длина трассы в километрах,
+ * количество новых придорожных кафе и максимально допустимое расстояние между двумя соседними кафе после появления новых
+ * (10⩽N⩽1000,1⩽K⩽100,1⩽M⩽N). Далее дано целое число L, за которым следует
+ * L натуральных чисел — номера путевых столбов, у которых уже есть придорожные кафе (помимо двух крайних).
+ * У одного столба есть не более одного кафе. Гарантируется, что L+K<N.
+ * В выходной поток выведите «YES», если там, где сейчас нет кафе, можно построить
+ * K новых придорожных кафе так, чтобы расстояние между любыми двумя соседними кафе не превосходило
+ * M км. В противном случае выведите «NO».
+ * <p>
+ * Sample Input:
+ * 15 2 3
+ * 3
+ * 6 3 12
+ * <p>
+ * Sample Output:
+ * YES
+ */
 public class CafesOnRoad {
 
-    public static void search() {
+    public static void readAndRun() {
         try (Scanner scanner = new Scanner(System.in)) {
-            int n = scanner.nextInt(); //road length
-            int k = scanner.nextInt(); // number of new cafes
-            int m = scanner.nextInt(); // max distance between cafes
-            int l = scanner.nextInt(); // cafes that on the road
-            int[] cafes = new int[l]; // cafes positions
-            for (int i = 0; i < l; i++) {
-                cafes[i] = scanner.nextInt();
+            int nRoadLength = scanner.nextInt();
+            int kNeedToBuildCafes = scanner.nextInt();
+            int mNotFartherDistance = scanner.nextInt();
+            int lCafesBuiltBetween = scanner.nextInt();
+            int[] cafesBetween = new int[lCafesBuiltBetween];
+            for (int i = 0; i < lCafesBuiltBetween; i++) {
+                cafesBetween[i] = scanner.nextInt();
             }
-            f(n, k, m, l, cafes);
+            var result = calcPossibilityToBuildCafes(
+                    nRoadLength, kNeedToBuildCafes, mNotFartherDistance, cafesBetween);
+            if (result) {
+                System.out.println("YES");
+            } else {
+                System.out.println("NO");
+            }
         }
     }
 
-    public static void f(int n, int k, int m, int l, int[] cafesBetween) {
-        int[] cafes = Arrays.copyOf(cafesBetween, cafesBetween.length + 2);
-        cafes[cafesBetween.length] = 0;
-        cafes[cafesBetween.length + 1] = n;
-        Arrays.sort(cafes);
-        int[] distances = new int[cafes.length - 1]; // distances
-        int i;
-        for (i = 0; i < cafes.length - 1; i++) {
-            distances[i] = cafes[i + 1] - cafes[i];
+    public static boolean calcPossibilityToBuildCafes(
+            int nRoadLength,
+            int kNeedToBuildCafes,
+            int mNotFartherDistance,
+            int[] cafesBetween
+    ) {
+        int[] cafesAllBuilt = Arrays.copyOf(cafesBetween, cafesBetween.length + 2);
+        cafesAllBuilt[cafesBetween.length] = 0;
+        cafesAllBuilt[cafesBetween.length + 1] = nRoadLength;
+        Arrays.sort(cafesAllBuilt);
+
+        int[] distances = new int[cafesAllBuilt.length - 1];
+        for (int i = 0; i < cafesAllBuilt.length - 1; i++) {
+            distances[i] = cafesAllBuilt[i + 1] - cafesAllBuilt[i];
         }
         Arrays.sort(distances);
 
-        int cnt = 0; // minimum needed to cover at least m distance cafes
+        int numMinimumToCoverAtLeastDistance = 0;
         for (int j = distances.length - 1; j >= 0; j--) {
-            if (distances[j] < m) {
+            if (distances[j] < mNotFartherDistance) {
                 break;
             }
-            int r = distances[j];
-            cnt += r % m == 0 ? r / m - 1 : r / m;
+            int widerThanMDistance = distances[j];
+            numMinimumToCoverAtLeastDistance += widerThanMDistance % mNotFartherDistance == 0
+                    ? widerThanMDistance / mNotFartherDistance - 1
+                    : widerThanMDistance / mNotFartherDistance;
         }
 
-        int cnt2 = 0; // maximum slots available to place a cafe
-        for (i = 0; i < cafes.length - 1; i++) {
+        int maxEmptySlots = 0;
+        for (int i = 0; i < cafesAllBuilt.length - 1; i++) {
             if (distances[i] > 2) {
-                cnt2 += distances[i] - 2;
+                maxEmptySlots += distances[i] - 2;
             }
         }
 
-        if (cnt <= k && k <= cnt2) {
-            System.out.println("YES");
-        } else {
-            System.out.println("NO");
-        }
-
-//        int low = 0;
-//        int high = distances.length - 1;
-//        int mid;
-//        while (low <= high) {
-//            mid = low + (high - low) / 2;
-//            if (m > distances[mid]) {
-//                high = mid - 1;
-//            } else {
-//                low = mid + 1;
-//            }
-//        }
-//        int spare = 0;
-//        if (low - 1 < 0 || low - 1 > distances.length - 1) {
-//            return m + 1;
-//        }
-//        for (int j = low - 1; j <= distances.length - 1; j++) {
-//            spare += distances[j];
-//        }
-//        return spare / (k + 1);
+        return kNeedToBuildCafes <= maxEmptySlots && kNeedToBuildCafes >= numMinimumToCoverAtLeastDistance;
     }
 }
