@@ -70,9 +70,9 @@ public class CafesOnRoad {
         }
 
         int maxEmptySlots = 0;
-        for (int i = 0; i < cafesAllBuilt.length - 1; i++) {
-            if (distances[i] > 2) {
-                maxEmptySlots += distances[i] - 2;
+        for (int i = 0; i < distances.length; i++) {
+            if (distances[i] >= 2) {
+                maxEmptySlots += distances[i] + 1 - 2;
             }
         }
 
